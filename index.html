@@ -473,6 +473,14 @@ function calcSinsal(P){
   // 공망(空亡): 일주 기준 2지지
   const gm=gongmang(P.day.s,P.day.b);
   addByBr("공망", new Set(gm));
+  // 천덕귀인 (월지 기준; 's'=천간 / 'b'=지지)
+  const mB=P.month.b;
+  const TENDEOK={2:['s',3],3:['b',8],4:['s',8],5:['s',7],6:['b',11],7:['s',0],8:['s',9],9:['b',2],10:['s',2],11:['s',1],0:['b',5],1:['s',6]};
+  const td=TENDEOK[mB];
+  if(td) order.forEach((p,i)=>{ if(td[0]==='s'? p.s===td[1] : p.b===td[1]) res[i].push("천덕귀인"); });
+  // 월덕귀인 (월지 삼합국 → 천간)
+  const wd=[8,2,6,0][SAMHAP[mB]];
+  order.forEach((p,i)=>{ if(p.s===wd) res[i].push("월덕귀인"); });
   // 60갑자 기반 (각 기둥)
   order.forEach((p,i)=>{
     const gj=STEM[p.s]+BR[p.b];
@@ -491,6 +499,15 @@ function calcSinsal(P){
   // 천라지망: 천라=술해(10,11), 지망=진사(4,5) 쌍이 있으면
   if(branches.includes(10)&&branches.includes(11)) order.forEach((p,i)=>{ if(p.b===10||p.b===11) res[i].push("천라"); });
   if(branches.includes(4)&&branches.includes(5))  order.forEach((p,i)=>{ if(p.b===4||p.b===5)  res[i].push("지망"); });
+  // 원진 (지지 쌍): 자미 축오 인유 묘신 진해 사술
+  const WONJIN=[[0,7],[1,6],[2,9],[3,8],[4,11],[5,10]];
+  for(let i=0;i<4;i++)for(let j=i+1;j<4;j++){
+    WONJIN.forEach(pr=>{
+      if((branches[i]===pr[0]&&branches[j]===pr[1])||(branches[i]===pr[1]&&branches[j]===pr[0])){
+        res[i].push("원진"); res[j].push("원진");
+      }
+    });
+  }
   return res.map(a=>[...new Set(a)]);
 }
 
