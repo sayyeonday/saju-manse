@@ -81,6 +81,11 @@
   .cap table.grid{table-layout:fixed;}
   .cap table.grid th,.cap table.grid td{padding:7px 2px; word-break:keep-all; overflow:hidden;}
   .cap .card{box-shadow:none;}
+  .capbox{padding:18px;}
+  .capbox .card{margin-bottom:0;}
+  .caphead{text-align:center; padding:6px 0 18px;}
+  .caphead .capname{font-size:28px; font-weight:700; color:var(--ink); letter-spacing:.02em;}
+  .caphead .capmeta{font-size:17px; color:#6b675c; margin-top:6px;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
@@ -715,20 +720,50 @@ function buildCopyText(order,tgTop,tgBot,stage,sinsal,R,D,dm,meta){
 }
 function flash(btn,msg){ if(!btn)return; if(btn._o===undefined)btn._o=btn.textContent; btn.textContent=msg; clearTimeout(btn._t); btn._t=setTimeout(()=>{btn.textContent=btn._o;btn._o=undefined;},1600); }
 const pad2=n=>String(n).padStart(2,"0");
-function saveImage(ev){
+const CAP_W=440;               // 폰 화면처럼 좁은 폭 → 글자가 크게
+function capBg(){ return getComputedStyle(document.body).backgroundColor || "#eceae3"; }
+function dlImg(url, fn){ const a=document.createElement('a'); a.download=fn; a.href=url; a.click(); }
+// 노드를 캡처해 3:4 비율 캔버스(여백 패딩)로 반환
+async function capture34(node, bg){
+  const c=await html2canvas(node,{backgroundColor:bg, scale:3, useCORS:true, windowWidth:CAP_W, width:CAP_W});
+  const cw=c.width, ch=c.height, r=3/4; let fw,fh;
+  if(cw/ch > r){ fw=cw; fh=Math.round(cw/r); } else { fh=ch; fw=Math.round(ch*r); }
+  const out=document.createElement('canvas'); out.width=fw; out.height=fh;
+  const x=out.getContext('2d'); x.fillStyle=bg; x.fillRect(0,0,fw,fh);
+  x.drawImage(c, Math.round((fw-cw)/2), Math.round((fh-ch)/2));
+  return out.toDataURL('image/png');
+}
+function makeCapBox(headHtml, cards, bg){
+  const box=document.createElement('div');
+  box.className='capbox cap';
+  box.style.cssText=`position:fixed; left:-10000px; top:0; width:${CAP_W}px; background:${bg};`;
+  box.innerHTML=headHtml;
+  cards.forEach(c=>box.appendChild(c.cloneNode(true)));
+  document.body.appendChild(box);
+  return box;
+}
+async function saveImage(ev){
   const btn=ev && ev.currentTarget;
   const el=document.getElementById('result');
   if(!el || !el.innerHTML.trim()){ flash(btn,"먼저 뽑기"); return; }
   if(typeof html2canvas!=='function'){ flash(btn,"로드 실패(인터넷)"); return; }
   flash(btn,"생성 중…");
-  const bg=getComputedStyle(document.body).backgroundColor || "#eceae3";
-  const W=440;                 // 폰 화면처럼 좁은 폭 → 글자가 크게 보임
-  el.classList.add('cap');
-  html2canvas(el,{backgroundColor:bg, scale:3, useCORS:true, windowWidth:W, width:W}).then(canvas=>{
-    const fn=(LAST&&LAST.name?LAST.name+"_":"사주_")+(LAST?`${LAST.y}-${pad2(LAST.m)}-${pad2(LAST.d)}`:"")+".png";
-    const a=document.createElement('a'); a.download=fn; a.href=canvas.toDataURL('image/png'); a.click();
-    flash(btn,"저장됨!");
-  }).catch(()=>flash(btn,"실패")).finally(()=>el.classList.remove('cap'));
+  const bg=capBg();
+  const nm=(LAST&&LAST.name)?LAST.name:"";
+  const meta=LAST?`${LAST.y}-${pad2(LAST.m)}-${pad2(LAST.d)} ${pad2(LAST.h)}:${pad2(LAST.mi)} · ${LAST.sex==='M'?'남':'여'}`:"";
+  const head=`<div class="caphead"><div class="capname">${nm||"사주 만세력"}</div><div class="capmeta">${meta}</div></div>`;
+  const base=(nm?nm+"_":"사주_")+(LAST?`${LAST.y}-${pad2(LAST.m)}-${pad2(LAST.d)}`:"");
+  const cards=[...el.children];
+  let b1,b2;
+  try{
+    b1=makeCapBox(head, [cards[0]], bg);              // ① 원국
+    b2=makeCapBox(head, cards.slice(1), bg);          // ② 나머지
+    const u1=await capture34(b1,bg), u2=await capture34(b2,bg);
+    dlImg(u1, base+"_1_원국.png");
+    setTimeout(()=>dlImg(u2, base+"_2_분석.png"), 500);
+    flash(btn,"저장됨! (2장)");
+  }catch(e){ flash(btn,"실패"); }
+  finally{ if(b1)b1.remove(); if(b2)b2.remove(); }
 }
 
 initLocation(); // 국가/지역 셀렉트 초기화
