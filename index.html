@@ -535,12 +535,13 @@ function calcRelations(P){
     });
   }
   tripleScan(SAMHAP,"samhap"); tripleScan(BANGHAP,"banghap");
-  // 형
+  // 형(刑): 2지지 형 쌍(반형) + 자형 + 삼형 완성
   const present=brs.map(x=>x[1]);
+  const HYEONG_PAIR=[[2,5],[5,8],[1,10],[10,7],[0,3]]; // 인사·사신·축술·술미·자묘
+  pairScan(HYEONG_PAIR, brs, (a,b)=>out.hyeong.push(`${a}-${b} 형`));
+  [4,6,9,11].forEach(n=>{ if(present.filter(x=>x===n).length>=2) out.hyeong.push(BR[n]+BR[n]+" 자형"); });
   if([2,5,8].every(n=>present.includes(n))) out.hyeong.push("인사신 삼형");
   if([1,10,7].every(n=>present.includes(n))) out.hyeong.push("축술미 삼형");
-  if(present.includes(0)&&present.includes(3)) out.hyeong.push("자묘 형");
-  [4,6,9,11].forEach(n=>{ if(present.filter(x=>x===n).length>=2) out.hyeong.push(BR[n]+BR[n]+" 자형"); });
   return out;
 }
 
