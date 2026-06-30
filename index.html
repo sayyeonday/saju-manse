@@ -469,6 +469,7 @@ function calcSinsal(P){
   if(CHEONEUL[dm]) addByBr("천을귀인", new Set(CHEONEUL[dm]));
   // 문창·양인: 일간 기준
   if(MUNCHANG[dm]!=null) addByBr("문창귀인", new Set([MUNCHANG[dm]]));
+  if(MUNCHANG[dm]!=null) addByBr("문곡귀인", new Set([(MUNCHANG[dm]+6)%12])); // 문창의 충(반대 지지)
   if(YANGIN[dm]!=null) addByBr("양인", new Set([YANGIN[dm]]));
   // 공망(空亡): 일주 기준 2지지
   const gm=gongmang(P.day.s,P.day.b);
