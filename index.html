@@ -111,9 +111,8 @@
     <div><label>이름</label><input id="name" type="text" placeholder="(선택)" style="width:110px"></div>
     <div><label>국가</label><select id="country" onchange="fillRegions()" style="width:120px"></select></div>
     <div><label>지역</label><select id="region" style="width:160px"></select></div>
-    <div><label>진태양시</label><select id="tsolar"><option value="1" selected>적용</option><option value="0">미적용</option></select></div>
     <div><label>자시 기준</label><select id="jasi"><option value="std">야자시(23~익일01)</option><option value="early">조자시(23시 이후 익일)</option></select></div>
-    <button onclick="run()">뽑기</button>
+    <button onclick="run()">확인</button>
     <button class="ghost" onclick="saveImage(event)">이미지 저장</button>
   </div>
   <div class="hint">양력 입력 · 입력시각은 그 지역 표준시(시계시각). 국가·지역 경도로 진태양시 보정, 한국은 과거 서머타임·표준자오선 이력 자동 반영.</div>
@@ -599,7 +598,7 @@ function run(){
   const country=g('country').value, region=+g('region').value;
   const loc=resolveLoc(country, region);
   const name=g('name').value.trim();
-  const opt={ lon:loc.lon, std:loc.std, tz:loc.tz, country, regionName:loc.name, trueSolar:g('tsolar').value==='1', jasi:g('jasi').value };
+  const opt={ lon:loc.lon, std:loc.std, tz:loc.tz, country, regionName:loc.name, trueSolar:true, jasi:g('jasi').value };
   const S=calcSaju(y,m,d,h,mi,opt);
   const P=S.pillars, dm=P.day.s;
   LAST={y,m,d,h,mi,sex,opt,S,name};
