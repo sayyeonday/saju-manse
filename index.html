@@ -51,11 +51,12 @@
   table.saju th:last-child,table.saju td:last-child{border-right:none;}
   table.saju tr:last-child td{border-bottom:none;}
   table.saju th{background:#f4efe4; font-size:15px; color:#6f6a5e; font-weight:600; letter-spacing:.04em; padding:11px 3px;}
-  .ten{font-size:14px; color:var(--muted); padding:6px 0;}
+  .ten{font-size:17px; color:#4f4b42; padding:7px 0; font-weight:600;}
   .gj{height:82px; vertical-align:middle;}
   .glyph{font-family:"AppleMyungjo","Nanum Myeongjo",serif; font-size:40px; font-weight:600; line-height:1.05;}
   .glyph .ko{font-family:-apple-system,"Apple SD Gothic Neo",sans-serif; font-size:14px; font-weight:500; display:block; opacity:.92; margin-top:3px;}
   .sub{font-size:14px; color:#6b675c; padding:6px 1px; line-height:1.5;}
+  .ss12{font-size:16px; color:#56524a; font-weight:600; line-height:1.45;}
   .jjg{font-size:13px; color:#56524a; padding:7px 3px; line-height:1.6;}
   .chip{display:inline-block; padding:1px 6px; border-radius:5px; margin:1px; font-size:13px; line-height:1.6;}
 
@@ -67,10 +68,10 @@
   table.grid th{background:#f4efe4; color:#6f6a5e; font-weight:600;}
   table.grid small{font-weight:500; opacity:.92; font-size:13px;}
 
-  .rel{font-size:15.5px; line-height:2.05;}
+  .rel{font-size:18px; line-height:2.05;}
   .rel b{font-weight:700;}
   .tag{display:inline-block; background:#f0ece2; border:1px solid var(--line); border-radius:999px;
-    padding:3px 12px; margin:3px 4px 3px 0; font-size:14px; color:#5b574d;}
+    padding:4px 13px; margin:3px 4px 3px 0; font-size:16px; color:#5b574d;}
   .tag.warn{background:#f8ece8; border-color:#e6cfc6; color:#9d5b4b;}
   .tag.good{background:#ebf1ec; border-color:#cfe0d4; color:#3f6b51;}
   #copyArea{width:100%; height:170px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px;
@@ -635,11 +636,11 @@ function run(){
    <tr>${tgBot.map(t=>`<td class="ten">${t}</td>`).join("")}</tr>
    <tr>${stage.map(t=>`<td class="sub">${t}</td>`).join("")}</tr>
    <tr>${order.map(([nm,p])=>`<td class="jjg">${jjgHtml(p.b,dm)}</td>`).join("")}</tr>
-   <tr>${order.map(([nm,p])=>`<td class="sub">${twelveSinsal(P.year.b,p.b)}<br>${twelveSinsal(P.day.b,p.b)}</td>`).join("")}</tr>
+   <tr>${order.map(([nm,p])=>`<td class="sub ss12">${twelveSinsal(P.year.b,p.b)}<br>${twelveSinsal(P.day.b,p.b)}</td>`).join("")}</tr>
    <tr>${sinsal.map(arr=>`<td class="jjg">${arr.length?arr.map(s=>`<span class="tag">${s}</span>`).join(""):"<span style='color:#bbb'>-</span>"}</td>`).join("")}</tr>
   </tbody></table>
-  <div class="rel" style="margin-top:10px"><b style="font-size:12px;color:#666">월령</b> <span class="tag">${BR_H[P.month.b]}${BR[P.month.b]}(${OH_NAME[wOH]})·${brTenGod(dm,P.month.b)} → 일간 ${deukryeong?"득령":"실령"}</span></div>
-  <div class="rel" style="margin-top:6px"><b style="font-size:12px;color:#666">형충회합</b> ${relHtml||"<span style='color:#bbb'>없음</span>"}</div>
+  <div class="rel" style="margin-top:10px"><b style="font-size:16px;color:#555">월령</b> <span class="tag">${BR_H[P.month.b]}${BR[P.month.b]}(${OH_NAME[wOH]})·${brTenGod(dm,P.month.b)} → 일간 ${deukryeong?"득령":"실령"}</span></div>
+  <div class="rel" style="margin-top:6px"><b style="font-size:16px;color:#555">형충회합</b> ${relHtml||"<span style='color:#bbb'>없음</span>"}</div>
   <div class="hint" style="margin-top:8px">${birthStr} · ${country} ${loc.name} · 표준자오선 ${S.std}°${S.dstApplied?" · 서머타임 -1h":""} · 절기년 ${S.solarYear} · 적용시각 ${pad(S.trueH)}:${pad(S.trueMi)}${opt.trueSolar?` (보정 ${S.offsetMin>0?'+':''}${Math.round(S.offsetMin)}분)`:' (진태양시 미적용)'} · 일주기준일 ${S.dayDate[0]}-${pad(S.dayDate[1])}-${pad(S.dayDate[2])}</div>
   </div>`;
 
@@ -657,7 +658,7 @@ function run(){
   const GM_MEAN={"년주":"조상·초년운","월주":"부모·형제·직업운","시주":"자녀·말년운"};
   const gmHit=order.filter(([nm,p])=>gm.includes(p.b)).map(([nm])=>`${nm}(${GM_MEAN[nm]||""})`);
   html+=`<div class="card"><h2>신강·신약 / 공망</h2><div class="rel">
-   <div><b>일간</b> ${STEM_H[dm]}(${OH_NAME[STEM_OH[dm]]}) · 판정 <span class="tag ${ST.label==='신강'?'good':ST.label==='신약'?'warn':''}">${ST.label}</span> <span style="color:#888">(내편 ${ST.sup} : 설기·극 ${ST.dr}, ${Math.round(ST.ratio*100)}%)</span></div>
+   <div><b>일간</b> ${STEM_H[dm]}(${OH_NAME[STEM_OH[dm]]}) · 판정 <span class="tag ${ST.label==='신강'?'good':ST.label==='신약'?'warn':''}">${ST.label}</span> <span style="color:#999;font-size:14px">(내편 ${ST.sup} : 설기·극 ${ST.dr}, ${Math.round(ST.ratio*100)}%)</span></div>
    <div style="margin-top:6px"><b>통근</b> ${ST.rooted.length?ST.rooted.join(", ")+" 지장간에 비겁 뿌리":"무근(無根) — 지지에 같은 오행 뿌리 없음"}</div>
    <div style="margin-top:6px"><b>조후</b> ${ST.season} 출생 · ${ST.johu}</div>
    <div style="margin-top:6px"><b>희신(조후용신)</b> 생월 ${BR_H[P.month.b]} 대비 일간 ${STEM_H[dm]} → ${heesinChips(HEESIN[dm][P.month.b])}</div>
@@ -670,7 +671,7 @@ function run(){
   const saeun=calcSaeun(dm, nowY, 10);
   const seCell=(idx,isStem,extra)=>{const oh=isStem?STEM_OH[idx]:BR_OH[idx],t=oh===3?'#000':'#fff';return `<td style="background:${OH_COLOR[oh]};color:${t};font-weight:700${oh===3?';box-shadow:inset 0 0 0 1px #ddd':''}">${isStem?STEM_H[idx]:BR_H[idx]}<br><small style="color:${t}">${extra}</small></td>`;};
   html+=`<div class="card"><h2>세운 (연운, ${nowY}~)</h2>
-   <table class="grid"><tr><th>연도</th>${saeun.map(x=>`<td>${x.Y}</td>`).join("")}</tr>
+   <table class="grid"><tr><th>연도</th>${saeun.map(x=>`<td>${String(x.Y).slice(2)}</td>`).join("")}</tr>
    <tr><th>천간</th>${saeun.map(x=>seCell(x.s,true,x.ten)).join("")}</tr>
    <tr><th>지지</th>${saeun.map(x=>seCell(x.b,false,x.stage)).join("")}</tr>
    </table><div class="hint" style="margin-top:6px">양력연도 기준 간략 표기(입춘 전 출생연 보정 미적용).</div></div>`;
@@ -723,14 +724,15 @@ const pad2=n=>String(n).padStart(2,"0");
 const CAP_W=440;               // 폰 화면처럼 좁은 폭 → 글자가 크게
 function capBg(){ return getComputedStyle(document.body).backgroundColor || "#eceae3"; }
 function dlImg(url, fn){ const a=document.createElement('a'); a.download=fn; a.href=url; a.click(); }
-// 노드를 캡처해 3:4 비율 캔버스(여백 패딩)로 반환
+// 노드를 캡처해 9:16(폰) 비율로 반환 — 좌우 여백 없음(폭 채움), 부족하면 위아래만 패딩
 async function capture34(node, bg){
   const c=await html2canvas(node,{backgroundColor:bg, scale:3, useCORS:true, windowWidth:CAP_W, width:CAP_W});
-  const cw=c.width, ch=c.height, r=3/4; let fw,fh;
-  if(cw/ch > r){ fw=cw; fh=Math.round(cw/r); } else { fh=ch; fw=Math.round(ch*r); }
+  const cw=c.width, ch=c.height;
+  const minH=Math.round(cw*16/9);          // 9:16 최소 높이
+  const fw=cw, fh=Math.max(ch, minH);      // 좌우 패딩 없음, 내용이 길면 그만큼 길어짐
   const out=document.createElement('canvas'); out.width=fw; out.height=fh;
   const x=out.getContext('2d'); x.fillStyle=bg; x.fillRect(0,0,fw,fh);
-  x.drawImage(c, Math.round((fw-cw)/2), Math.round((fh-ch)/2));
+  x.drawImage(c, 0, Math.round((fh-ch)/2));
   return out.toDataURL('image/png');
 }
 function makeCapBox(headHtml, cards, bg){
