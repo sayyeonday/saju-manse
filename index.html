@@ -705,11 +705,10 @@ function run(){
   const gmHit=order.filter(([nm,p])=>gm.includes(p.b)).map(([nm])=>`${nm}(${GM_MEAN[nm]||""})`);
   html+=`<div class="card"><h2>신강·신약 / 공망</h2><div class="rel">
    <div><b>일간</b> ${STEM_H[dm]}(${OH_NAME[STEM_OH[dm]]}) · 판정 <span class="tag ${ST.label==='신강'?'good':ST.label==='신약'?'warn':''}">${ST.label}</span> <span style="color:#999;font-size:14px">(내편 ${ST.sup} : 설기·극 ${ST.dr}, ${Math.round(ST.ratio*100)}%)</span></div>
-   <div style="margin-top:6px"><b>통근</b> ${ST.rooted.length?ST.rooted.join(", ")+" 지장간에 비겁 뿌리":"무근(無根) — 지지에 같은 오행 뿌리 없음"}</div>
    <div style="margin-top:6px"><b>조후</b> ${ST.season} 출생 · ${ST.johu}</div>
    <div style="margin-top:6px"><b>희신(조후용신)</b> 생월 ${BR_H[P.month.b]} 대비 일간 ${STEM_H[dm]} → ${heesinChips(HEESIN[dm][P.month.b])}</div>
    <div style="margin-top:6px"><b>공망</b> ${BR_H[gm[0]]}${BR[gm[0]]}·${BR_H[gm[1]]}${BR[gm[1]]} → ${gmHit.length?gmHit.join(", "):"원국에 해당 지지 없음"}</div>
-   <div class="hint" style="margin-top:6px">지장간 일수비율·위치가중(월지 2.0·일지 1.2·시 0.8·년 0.7)으로 통근 강도 반영. 신강=비겁·인성 우세, 신약=식상·재성·관성으로 설기. 조후는 계절 한열 균형용.</div>
+   <div class="hint" style="margin-top:6px">지장간 일수비율·위치가중(월지 2.0·일지 1.2·시 0.8·년 0.7)으로 일간 강약 산정. 신강=비겁·인성 우세, 신약=식상·재성·관성으로 설기. 조후는 계절 한열 균형용.</div>
   </div></div>`;
 
   // 세운(연운)
