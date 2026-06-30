@@ -455,6 +455,16 @@ const CHEONEUL={0:[1,7],4:[1,7],6:[1,7], 1:[0,8],5:[0,8], 2:[11,9],3:[11,9], 7:[
 const MUNCHANG={0:5,1:6,2:8,3:9,4:8,5:9,6:11,7:0,8:2,9:3};
 // 양인 (양간)
 const YANGIN={0:3,2:6,4:6,6:9,8:0};
+// 추가 귀인 (일간 기준) — 지지 index
+const TAEGEUK={0:[0,6],1:[0,6],2:[3,9],3:[3,9],4:[4,10,1,7],5:[4,10,1,7],6:[2,11],7:[2,11],8:[5,8],9:[5,8]};
+const CHEONGWAN={0:7,1:4,2:5,3:9,4:10,5:3,6:11,7:8,8:2,9:6}; // 천관귀인
+const CHEONJU={0:5,1:6,2:5,3:6,4:8,5:9,6:11,7:0,8:2,9:3};   // 천주귀인(식신록)
+const BOKSEONG={0:2,1:1,2:0,3:9,4:8,5:7,6:6,7:5,8:4,9:3};   // 복성귀인
+const HAKDANG={0:11,1:6,2:2,3:9,4:2,5:9,6:5,7:0,8:8,9:3};   // 학당귀인(장생지)
+const GEUMYEO={0:4,1:5,2:7,3:8,4:7,5:8,6:10,7:11,8:1,9:2};  // 금여(건록+2)
+const AMROK={0:11,1:10,2:8,3:7,4:8,5:7,6:5,7:4,8:2,9:1};    // 암록(건록의 육합)
+const STEMHAP={0:5,5:0,1:6,6:1,2:7,7:2,3:8,8:3,4:9,9:4};    // 천간 합 짝
+const BRHAP6={0:1,1:0,2:11,11:2,3:10,10:3,4:9,9:4,5:8,8:5,6:7,7:6}; // 지지 육합 짝
 const BAEKHO=new Set(["갑진","을미","병술","정축","무진","임술","계축"]);
 const GWEGANG=new Set(["경진","경술","임진","무술"]);
 
@@ -471,6 +481,14 @@ function calcSinsal(P){
   if(MUNCHANG[dm]!=null) addByBr("문창귀인", new Set([MUNCHANG[dm]]));
   if(MUNCHANG[dm]!=null) addByBr("문곡귀인", new Set([(MUNCHANG[dm]+6)%12])); // 문창의 충(반대 지지)
   if(YANGIN[dm]!=null) addByBr("양인", new Set([YANGIN[dm]]));
+  // 추가 귀인 (일간 기준)
+  addByBr("태극귀인", new Set(TAEGEUK[dm]));
+  addByBr("천관귀인", new Set([CHEONGWAN[dm]]));
+  addByBr("천주귀인", new Set([CHEONJU[dm]]));
+  addByBr("복성귀인", new Set([BOKSEONG[dm]]));
+  addByBr("학당귀인", new Set([HAKDANG[dm]]));
+  addByBr("금여", new Set([GEUMYEO[dm]]));
+  addByBr("암록", new Set([AMROK[dm]]));
   // 공망(空亡): 일주 기준 2지지
   const gm=gongmang(P.day.s,P.day.b);
   addByBr("공망", new Set(gm));
@@ -482,6 +500,12 @@ function calcSinsal(P){
   // 월덕귀인 (월지 삼합국 → 천간)
   const wd=[8,2,6,0][SAMHAP[mB]];
   order.forEach((p,i)=>{ if(p.s===wd) res[i].push("월덕귀인"); });
+  // 천덕합 (천덕이 천간이면 천간합 짝, 지지면 육합 짝)
+  if(td){ const tdh=td[0]==='s'?['s',STEMHAP[td[1]]]:['b',BRHAP6[td[1]]];
+    order.forEach((p,i)=>{ if(tdh[0]==='s'? p.s===tdh[1] : p.b===tdh[1]) res[i].push("천덕합"); }); }
+  // 월덕합 (월덕 천간의 합 짝)
+  const wdh=STEMHAP[wd];
+  order.forEach((p,i)=>{ if(p.s===wdh) res[i].push("월덕합"); });
   // 60갑자 기반 (각 기둥)
   order.forEach((p,i)=>{
     const gj=STEM[p.s]+BR[p.b];
