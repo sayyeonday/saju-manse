@@ -77,6 +77,7 @@
     margin-top:10px; display:none; border:1px solid var(--line); border-radius:9px; padding:10px; background:#fff;}
   .dist span{display:inline-block; padding:3px 10px; border-radius:999px; margin:2px; font-size:13px;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -102,19 +103,12 @@
     <div><label>진태양시</label><select id="tsolar"><option value="1" selected>적용</option><option value="0">미적용</option></select></div>
     <div><label>자시 기준</label><select id="jasi"><option value="std">야자시(23~익일01)</option><option value="early">조자시(23시 이후 익일)</option></select></div>
     <button onclick="run()">뽑기</button>
-    <button class="ghost" onclick="toggleCopy(event)">노션용 텍스트 복사</button>
+    <button class="ghost" onclick="saveImage(event)">이미지 저장</button>
   </div>
   <div class="hint">양력 입력 · 입력시각은 그 지역 표준시(시계시각). 국가·지역 경도로 진태양시 보정, 한국은 과거 서머타임·표준자오선 이력 자동 반영.</div>
 </div>
 
 <div id="result"></div>
-
-<div class="card" id="copyCard" style="display:none">
-  <h2>노션 복붙용 텍스트</h2>
-  <div class="hint">아래 텍스트를 복사해서 노션에 붙여넣으면 표로 들어갑니다. (노션은 마크다운 표 붙여넣기 지원)</div>
-  <textarea id="copyArea" style="display:block"></textarea>
-  <button onclick="copyText(event)" style="margin-top:8px">클립보드에 복사</button>
-</div>
 
 </div><!-- /wrap -->
 
@@ -672,7 +666,6 @@ function run(){
    </table><div class="hint" style="margin-top:6px">양력연도 기준 간략 표기(입춘 전 출생연 보정 미적용).</div></div>`;
 
   document.getElementById('result').innerHTML=html;
-  buildCopyText(order,tgTop,tgBot,stage,sinsal,R,D,dm,{y,m,d,h,mi,sex,dist,name});
 }
 
 /* ===================== 노션 복사용 텍스트 ===================== */
@@ -715,20 +708,21 @@ function buildCopyText(order,tgTop,tgBot,stage,sinsal,R,D,dm,meta){
   t+=`\n■ 노션 DB용 (탭구분 TSV · DB에 붙여넣기)\n`+H.join("\t")+`\n`+row.join("\t")+`\n`;
   document.getElementById('copyArea').value=t;
 }
-function flash(btn,msg){ if(!btn)return; const o=btn.textContent; btn.textContent=msg; setTimeout(()=>btn.textContent=o,1500); }
-function doCopy(text, btn){
-  const ok=()=>flash(btn,"복사됨!");
-  const fb=()=>{ const a=document.getElementById('copyArea'); a.style.display='block'; a.focus(); a.select();
-    try{ document.execCommand('copy'); ok(); }catch(e){ flash(btn,"수동 복사하세요"); } };
-  if(navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(ok, fb);
-  else fb();
+function flash(btn,msg){ if(!btn)return; if(btn._o===undefined)btn._o=btn.textContent; btn.textContent=msg; clearTimeout(btn._t); btn._t=setTimeout(()=>{btn.textContent=btn._o;btn._o=undefined;},1600); }
+const pad2=n=>String(n).padStart(2,"0");
+function saveImage(ev){
+  const btn=ev && ev.currentTarget;
+  const el=document.getElementById('result');
+  if(!el || !el.innerHTML.trim()){ flash(btn,"먼저 뽑기"); return; }
+  if(typeof html2canvas!=='function'){ flash(btn,"로드 실패(인터넷)"); return; }
+  flash(btn,"생성 중…");
+  const bg=getComputedStyle(document.body).backgroundColor || "#eceae3";
+  html2canvas(el,{backgroundColor:bg, scale:2, useCORS:true, windowWidth:820, width:780}).then(canvas=>{
+    const fn=(LAST&&LAST.name?LAST.name+"_":"사주_")+(LAST?`${LAST.y}-${pad2(LAST.m)}-${pad2(LAST.d)}`:"")+".png";
+    const a=document.createElement('a'); a.download=fn; a.href=canvas.toDataURL('image/png'); a.click();
+    flash(btn,"저장됨!");
+  }).catch(()=>flash(btn,"실패"));
 }
-function toggleCopy(ev){
-  const c=document.getElementById('copyCard'); c.style.display='block';
-  c.scrollIntoView({behavior:'smooth', block:'start'});
-  doCopy(document.getElementById('copyArea').value, ev && ev.currentTarget);
-}
-function copyText(ev){ doCopy(document.getElementById('copyArea').value, ev && ev.currentTarget); }
 
 initLocation(); // 국가/지역 셀렉트 초기화
 run(); // 초기 예시
