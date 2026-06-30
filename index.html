@@ -533,14 +533,14 @@ function calcRelations(P){
       });
     }
   }
-  pairScan(HAP_S, stems, (a,b,e)=>out.cheonhap.push(`${a}-${b} 합(${e||""})`));
+  pairScan(HAP_S, stems, (a,b,e,x,y)=>out.cheonhap.push(`${STEM[x]}${STEM[y]}합 (${e||""}, ${a}-${b})`));
   pairScan(CHUNG_S, stems, (a,b,e,x,y)=>out.cheonchung.push(`${STEM[x]}${STEM[y]}충 (${a}-${b})`));
-  pairScan(YUKHAP, brs, (a,b,e)=>out.yukhap.push(`${a}-${b} 육합(${e})`));
+  pairScan(YUKHAP, brs, (a,b,e,x,y)=>out.yukhap.push(`${BR[x]}${BR[y]}육합 (${e}, ${a}-${b})`));
   pairScan(YUKCHUNG, brs, (a,b,e,x,y)=>out.yukchung.push(`${BR[x]}${BR[y]}충 (${a}-${b})`));
-  pairScan(PA, brs, (a,b)=>out.pa.push(`${a}-${b} 파`));
-  pairScan(HAE, brs, (a,b)=>out.hae.push(`${a}-${b} 해`));
+  pairScan(PA, brs, (a,b,e,x,y)=>out.pa.push(`${BR[x]}${BR[y]}파 (${a}-${b})`));
+  pairScan(HAE, brs, (a,b,e,x,y)=>out.hae.push(`${BR[x]}${BR[y]}해 (${a}-${b})`));
   const WONJIN=[[0,7],[1,6],[2,9],[3,8],[4,11],[5,10]]; // 자미 축오 인유 묘신 진해 사술
-  pairScan(WONJIN, brs, (a,b)=>out.wonjin.push(`${a}-${b} 원진`));
+  pairScan(WONJIN, brs, (a,b,e,x,y)=>out.wonjin.push(`${BR[x]}${BR[y]}원진 (${a}-${b})`));
   // 삼합/방합: 3지지 중 2개 이상
   function tripleScan(list, label){
     const present=brs.map(x=>x[1]);
