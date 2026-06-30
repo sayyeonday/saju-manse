@@ -76,6 +76,11 @@
   #copyArea{width:100%; height:170px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px;
     margin-top:10px; display:none; border:1px solid var(--line); border-radius:9px; padding:10px; background:#fff;}
   .dist span{display:inline-block; padding:3px 10px; border-radius:999px; margin:2px; font-size:13px;}
+
+  /* 이미지 캡처 전용: 좁은 폭에서도 표가 잘리지 않게 접어 글자를 크게 */
+  .cap table.grid{table-layout:fixed;}
+  .cap table.grid th,.cap table.grid td{padding:7px 2px; word-break:keep-all; overflow:hidden;}
+  .cap .card{box-shadow:none;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
@@ -717,11 +722,13 @@ function saveImage(ev){
   if(typeof html2canvas!=='function'){ flash(btn,"로드 실패(인터넷)"); return; }
   flash(btn,"생성 중…");
   const bg=getComputedStyle(document.body).backgroundColor || "#eceae3";
-  html2canvas(el,{backgroundColor:bg, scale:2, useCORS:true, windowWidth:820, width:780}).then(canvas=>{
+  const W=440;                 // 폰 화면처럼 좁은 폭 → 글자가 크게 보임
+  el.classList.add('cap');
+  html2canvas(el,{backgroundColor:bg, scale:3, useCORS:true, windowWidth:W, width:W}).then(canvas=>{
     const fn=(LAST&&LAST.name?LAST.name+"_":"사주_")+(LAST?`${LAST.y}-${pad2(LAST.m)}-${pad2(LAST.d)}`:"")+".png";
     const a=document.createElement('a'); a.download=fn; a.href=canvas.toDataURL('image/png'); a.click();
     flash(btn,"저장됨!");
-  }).catch(()=>flash(btn,"실패"));
+  }).catch(()=>flash(btn,"실패")).finally(()=>el.classList.remove('cap'));
 }
 
 initLocation(); // 국가/지역 셀렉트 초기화
