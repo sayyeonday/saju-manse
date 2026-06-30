@@ -605,7 +605,7 @@ function run(){
   LAST={y,m,d,h,mi,sex,opt,S,name};
 
   const order=[["시주",P.hour],["일주",P.day],["월주",P.month],["년주",P.year]];
-  const tgTop=order.map(([nm,p],i)=> i===1?"일간(아신)":tenGod(dm,p.s));
+  const tgTop=order.map(([nm,p],i)=> i===1?"일간":tenGod(dm,p.s));
   const tgBot=order.map(([nm,p])=>brTenGod(dm,p.b));
   const stage=order.map(([nm,p])=>twelveStage(dm,p.b));
   const sinsal=calcSinsal(P); // [시,일,월,년]
