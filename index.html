@@ -102,7 +102,7 @@
     <div><label>진태양시</label><select id="tsolar"><option value="1" selected>적용</option><option value="0">미적용</option></select></div>
     <div><label>자시 기준</label><select id="jasi"><option value="std">야자시(23~익일01)</option><option value="early">조자시(23시 이후 익일)</option></select></div>
     <button onclick="run()">뽑기</button>
-    <button class="ghost" onclick="toggleCopy()">노션 복사용 텍스트</button>
+    <button class="ghost" onclick="toggleCopy(event)">노션용 텍스트 복사</button>
   </div>
   <div class="hint">양력 입력 · 입력시각은 그 지역 표준시(시계시각). 국가·지역 경도로 진태양시 보정, 한국은 과거 서머타임·표준자오선 이력 자동 반영.</div>
 </div>
@@ -113,7 +113,7 @@
   <h2>노션 복붙용 텍스트</h2>
   <div class="hint">아래 텍스트를 복사해서 노션에 붙여넣으면 표로 들어갑니다. (노션은 마크다운 표 붙여넣기 지원)</div>
   <textarea id="copyArea" style="display:block"></textarea>
-  <button onclick="copyText()" style="margin-top:8px">클립보드에 복사</button>
+  <button onclick="copyText(event)" style="margin-top:8px">클립보드에 복사</button>
 </div>
 
 </div><!-- /wrap -->
@@ -715,8 +715,20 @@ function buildCopyText(order,tgTop,tgBot,stage,sinsal,R,D,dm,meta){
   t+=`\n■ 노션 DB용 (탭구분 TSV · DB에 붙여넣기)\n`+H.join("\t")+`\n`+row.join("\t")+`\n`;
   document.getElementById('copyArea').value=t;
 }
-function toggleCopy(){ const c=document.getElementById('copyCard'); c.style.display=c.style.display==="none"?"block":"none"; }
-function copyText(){ const a=document.getElementById('copyArea'); a.select(); navigator.clipboard.writeText(a.value); }
+function flash(btn,msg){ if(!btn)return; const o=btn.textContent; btn.textContent=msg; setTimeout(()=>btn.textContent=o,1500); }
+function doCopy(text, btn){
+  const ok=()=>flash(btn,"복사됨!");
+  const fb=()=>{ const a=document.getElementById('copyArea'); a.style.display='block'; a.focus(); a.select();
+    try{ document.execCommand('copy'); ok(); }catch(e){ flash(btn,"수동 복사하세요"); } };
+  if(navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(ok, fb);
+  else fb();
+}
+function toggleCopy(ev){
+  const c=document.getElementById('copyCard'); c.style.display='block';
+  c.scrollIntoView({behavior:'smooth', block:'start'});
+  doCopy(document.getElementById('copyArea').value, ev && ev.currentTarget);
+}
+function copyText(ev){ doCopy(document.getElementById('copyArea').value, ev && ev.currentTarget); }
 
 initLocation(); // 국가/지역 셀렉트 초기화
 run(); // 초기 예시
