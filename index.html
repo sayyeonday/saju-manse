@@ -533,14 +533,14 @@ function calcRelations(P){
       });
     }
   }
-  pairScan(HAP_S, stems, (a,b,e,x,y)=>out.cheonhap.push(`${STEM[x]}${STEM[y]}합 (${e||""}, ${a}-${b})`));
-  pairScan(CHUNG_S, stems, (a,b,e,x,y)=>out.cheonchung.push(`${STEM[x]}${STEM[y]}충 (${a}-${b})`));
-  pairScan(YUKHAP, brs, (a,b,e,x,y)=>out.yukhap.push(`${BR[x]}${BR[y]}육합 (${e}, ${a}-${b})`));
-  pairScan(YUKCHUNG, brs, (a,b,e,x,y)=>out.yukchung.push(`${BR[x]}${BR[y]}충 (${a}-${b})`));
-  pairScan(PA, brs, (a,b,e,x,y)=>out.pa.push(`${BR[x]}${BR[y]}파 (${a}-${b})`));
-  pairScan(HAE, brs, (a,b,e,x,y)=>out.hae.push(`${BR[x]}${BR[y]}해 (${a}-${b})`));
+  pairScan(HAP_S, stems, (a,b,e,x,y)=>out.cheonhap.push(`${STEM[x]}${STEM[y]}합(${e||""})`));
+  pairScan(CHUNG_S, stems, (a,b,e,x,y)=>out.cheonchung.push(`${STEM[x]}${STEM[y]}충`));
+  pairScan(YUKHAP, brs, (a,b,e,x,y)=>out.yukhap.push(`${BR[x]}${BR[y]}육합(${e})`));
+  pairScan(YUKCHUNG, brs, (a,b,e,x,y)=>out.yukchung.push(`${BR[x]}${BR[y]}충`));
+  pairScan(PA, brs, (a,b,e,x,y)=>out.pa.push(`${BR[x]}${BR[y]}파`));
+  pairScan(HAE, brs, (a,b,e,x,y)=>out.hae.push(`${BR[x]}${BR[y]}해`));
   const WONJIN=[[0,7],[1,6],[2,9],[3,8],[4,11],[5,10]]; // 자미 축오 인유 묘신 진해 사술
-  pairScan(WONJIN, brs, (a,b,e,x,y)=>out.wonjin.push(`${BR[x]}${BR[y]}원진 (${a}-${b})`));
+  pairScan(WONJIN, brs, (a,b,e,x,y)=>out.wonjin.push(`${BR[x]}${BR[y]}원진`));
   // 삼합/방합: 3지지 중 2개 이상
   function tripleScan(list, label){
     const present=brs.map(x=>x[1]);
@@ -556,12 +556,13 @@ function calcRelations(P){
   const present=brs.map(x=>x[1]);
   const HYEONG_PAIR=[[2,5],[5,8],[1,10],[10,7],[0,3]]; // 인사·사신·축술·술미·자묘
   pairScan(HYEONG_PAIR, brs, (a,b,e,x,y)=>{
-    const extra=(x===0&&y===3)||(x===3&&y===0)?", 무례지형":"";
-    out.hyeong.push(`${BR[x]}${BR[y]}형 (${a}-${b}${extra})`);
+    const extra=(x===0&&y===3)||(x===3&&y===0)?"(무례지형)":"";
+    out.hyeong.push(`${BR[x]}${BR[y]}형${extra}`);
   });
-  [4,6,9,11].forEach(n=>{ if(present.filter(x=>x===n).length>=2) out.hyeong.push(`${BR[n]}${BR[n]}형 (자형)`); });
-  if([2,5,8].every(n=>present.includes(n))) out.hyeong.push("인사신 삼형 (무은지형)");
-  if([1,10,7].every(n=>present.includes(n))) out.hyeong.push("축술미 삼형 (지세지형)");
+  [4,6,9,11].forEach(n=>{ if(present.filter(x=>x===n).length>=2) out.hyeong.push(`${BR[n]}${BR[n]}형(자형)`); });
+  if([2,5,8].every(n=>present.includes(n))) out.hyeong.push("인사신 삼형(무은지형)");
+  if([1,10,7].every(n=>present.includes(n))) out.hyeong.push("축술미 삼형(지세지형)");
+  Object.keys(out).forEach(k=>{ out[k]=[...new Set(out[k])]; }); // 위치 제거로 생기는 중복 정리
   return out;
 }
 
