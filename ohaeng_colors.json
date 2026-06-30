@@ -1,0 +1,53 @@
+{
+  "ohaeng": {
+    "목": { "hanja": "木", "name_ko": "목", "name_en": "wood",  "color_ko": "청색", "hex": "#4CAF50", "text_on_color": "#FFFFFF" },
+    "화": { "hanja": "火", "name_ko": "화", "name_en": "fire",  "color_ko": "적색", "hex": "#E53935", "text_on_color": "#FFFFFF" },
+    "토": { "hanja": "土", "name_ko": "토", "name_en": "earth", "color_ko": "황색", "hex": "#FBC02D", "text_on_color": "#000000" },
+    "금": { "hanja": "金", "name_ko": "금", "name_en": "metal", "color_ko": "백색", "hex": "#FAFAFA", "text_on_color": "#000000", "border": "#BDBDBD" },
+    "수": { "hanja": "水", "name_ko": "수", "name_en": "water", "color_ko": "흑색", "hex": "#212121", "text_on_color": "#FFFFFF" }
+  },
+
+  "cheongan": [
+    { "ko": "갑", "hanja": "甲", "ohaeng": "목" },
+    { "ko": "을", "hanja": "乙", "ohaeng": "목" },
+    { "ko": "병", "hanja": "丙", "ohaeng": "화" },
+    { "ko": "정", "hanja": "丁", "ohaeng": "화" },
+    { "ko": "무", "hanja": "戊", "ohaeng": "토" },
+    { "ko": "기", "hanja": "己", "ohaeng": "토" },
+    { "ko": "경", "hanja": "庚", "ohaeng": "금" },
+    { "ko": "신", "hanja": "辛", "ohaeng": "금" },
+    { "ko": "임", "hanja": "壬", "ohaeng": "수" },
+    { "ko": "계", "hanja": "癸", "ohaeng": "수" }
+  ],
+
+  "jiji": [
+    { "ko": "자", "hanja": "子", "ohaeng": "수" },
+    { "ko": "축", "hanja": "丑", "ohaeng": "토" },
+    { "ko": "인", "hanja": "寅", "ohaeng": "목" },
+    { "ko": "묘", "hanja": "卯", "ohaeng": "목" },
+    { "ko": "진", "hanja": "辰", "ohaeng": "토" },
+    { "ko": "사", "hanja": "巳", "ohaeng": "화" },
+    { "ko": "오", "hanja": "午", "ohaeng": "화" },
+    { "ko": "미", "hanja": "未", "ohaeng": "토" },
+    { "ko": "신", "hanja": "申", "ohaeng": "금" },
+    { "ko": "유", "hanja": "酉", "ohaeng": "금" },
+    { "ko": "술", "hanja": "戌", "ohaeng": "토" },
+    { "ko": "해", "hanja": "亥", "ohaeng": "수" }
+  ],
+
+  "_jijanggan_note": "지지별 지장간(숨은 천간). 순서 = 여기(餘氣)→중기(中氣)→정기(正氣). days=배속 일수(색 띠 비율로 사용). gan의 오행은 cheongan/ohaeng 매핑으로 조회.",
+  "jijanggan": {
+    "자": [ { "gan": "임", "ohaeng": "수", "type": "여기", "days": 10 }, { "gan": "계", "ohaeng": "수", "type": "정기", "days": 20 } ],
+    "축": [ { "gan": "계", "ohaeng": "수", "type": "여기", "days": 9 }, { "gan": "신", "ohaeng": "금", "type": "중기", "days": 3 }, { "gan": "기", "ohaeng": "토", "type": "정기", "days": 18 } ],
+    "인": [ { "gan": "무", "ohaeng": "토", "type": "여기", "days": 7 }, { "gan": "병", "ohaeng": "화", "type": "중기", "days": 7 }, { "gan": "갑", "ohaeng": "목", "type": "정기", "days": 16 } ],
+    "묘": [ { "gan": "갑", "ohaeng": "목", "type": "여기", "days": 10 }, { "gan": "을", "ohaeng": "목", "type": "정기", "days": 20 } ],
+    "진": [ { "gan": "을", "ohaeng": "목", "type": "여기", "days": 9 }, { "gan": "계", "ohaeng": "수", "type": "중기", "days": 3 }, { "gan": "무", "ohaeng": "토", "type": "정기", "days": 18 } ],
+    "사": [ { "gan": "무", "ohaeng": "토", "type": "여기", "days": 7 }, { "gan": "경", "ohaeng": "금", "type": "중기", "days": 7 }, { "gan": "병", "ohaeng": "화", "type": "정기", "days": 16 } ],
+    "오": [ { "gan": "병", "ohaeng": "화", "type": "여기", "days": 10 }, { "gan": "기", "ohaeng": "토", "type": "중기", "days": 9 }, { "gan": "정", "ohaeng": "화", "type": "정기", "days": 11 } ],
+    "미": [ { "gan": "정", "ohaeng": "화", "type": "여기", "days": 9 }, { "gan": "을", "ohaeng": "목", "type": "중기", "days": 3 }, { "gan": "기", "ohaeng": "토", "type": "정기", "days": 18 } ],
+    "신": [ { "gan": "무", "ohaeng": "토", "type": "여기", "days": 7 }, { "gan": "임", "ohaeng": "수", "type": "중기", "days": 7 }, { "gan": "경", "ohaeng": "금", "type": "정기", "days": 16 } ],
+    "유": [ { "gan": "경", "ohaeng": "금", "type": "여기", "days": 10 }, { "gan": "신", "ohaeng": "금", "type": "정기", "days": 20 } ],
+    "술": [ { "gan": "신", "ohaeng": "금", "type": "여기", "days": 9 }, { "gan": "정", "ohaeng": "화", "type": "중기", "days": 3 }, { "gan": "무", "ohaeng": "토", "type": "정기", "days": 18 } ],
+    "해": [ { "gan": "무", "ohaeng": "토", "type": "여기", "days": 7 }, { "gan": "갑", "ohaeng": "목", "type": "중기", "days": 7 }, { "gan": "임", "ohaeng": "수", "type": "정기", "days": 16 } ]
+  }
+}
